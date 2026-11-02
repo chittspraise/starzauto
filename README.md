@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Starz Auto
 
-## Getting Started
+Car-selling website built with Next.js 16, TypeScript, Tailwind CSS and SQLite (Node's built-in `node:sqlite`).
 
-First, run the development server:
+## Features
+
+- **Home page** with quick search and featured cars
+- **Browse cars** (`/cars`) with search, filters (make, body, fuel, transmission, price, year, mileage) and sorting
+- **Car detail pages** with photo gallery, specs and an enquiry / test-drive form
+- **Contact page** for general enquiries
+- **Dealer admin** (`/admin`): add, edit and delete cars, upload photos, mark cars reserved/sold/featured, and manage enquiries
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # then set ADMIN_PASSWORD and SESSION_SECRET
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The database (`data/starzauto.db`) and uploaded photos (`data/uploads/`) are created on first run, with a few sample cars you can delete from the admin.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Currency, locale and distance unit: `src/lib/format.ts`
+- Showroom address and hours: `src/app/contact/page.tsx`
+- Fuel, body type and transmission options: `src/lib/types.ts`
 
-## Learn More
+## Deploying
 
-To learn more about Next.js, take a look at the following resources:
+Data is stored on the server's disk, so deploy to a host with a persistent disk (a VPS, Railway or Render with a volume, etc.), not a serverless platform like Vercel. Back up the `data/` folder. Serve the site over HTTPS, because the admin login cookie is marked secure in production.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/
+  app/            pages, Server Actions, /uploads route
+    admin/        login + dashboard (cars, enquiries)
+    cars/         listing and detail pages
+  components/     shared UI (car cards, gallery, enquiry form)
+  lib/            database, queries, auth, validation, formatting
+```
