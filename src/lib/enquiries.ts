@@ -1,5 +1,5 @@
 import "server-only";
-import { getDb } from "./db";
+import { adminClient, check, publicClient } from "./supabase";
 import type { Enquiry } from "./types";
 
 type EnquiryRow = {
@@ -10,34 +10,37 @@ type EnquiryRow = {
   email: string;
   phone: string;
   message: string;
-  test_drive: number;
-  handled: number;
+  test_drive: boolean;
+  handled: boolean;
   created_at: string;
 };
 
-export function insertEnquiry(
-  enquiry: Omit<Enquiry, "id" | "createdAt" | "handled">,
-) {
-  getDb()
-    .prepare(
-      `INSERT INTO enquiries (car_id, car_title, name, email, phone, message, test_drive)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    )
-    .run(
-      enquiry.carId,
-      enquiry.carTitle,
-      enquiry.name,
-      enquiry.email,
-      enquiry.phone,
-      enquiry.message,
-      enquiry.testDrive ? 1 : 0,
-    );
+/** Public: the anon key may only insert enquiries (see RLS policy). */
+export async function insertEnquiry(enquiry: Omit<Enquiry, "id" | "createdAt" | "handled">) {
+  check(
+    await publicClient().from("enquiries").insert({
+      car_id: enquiry.carId,
+      car_title: enquiry.carTitle,
+      name: enquiry.name,
+      email: enquiry.email,
+      phone: enquiry.phone,
+      message: enquiry.message,
+      test_drive: enquiry.testDrive,
+    }),
+  );
 }
 
-export function listEnquiries(): Enquiry[] {
-  const rows = getDb()
-    .prepare("SELECT * FROM enquiries ORDER BY handled ASC, created_at DESC, id DESC")
-    .all() as EnquiryRow[];
+// ---- Admin only (service role) ----
+
+export async function listEnquiries(): Promise<Enquiry[]> {
+  const rows = check(
+    await adminClient()
+      .from("enquiries")
+      .select("*")
+      .order("handled", { ascending: true })
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false }),
+  ) as EnquiryRow[];
   return rows.map((row) => ({
     id: row.id,
     carId: row.car_id,
@@ -46,21 +49,21 @@ export function listEnquiries(): Enquiry[] {
     email: row.email,
     phone: row.phone,
     message: row.message,
-    testDrive: row.test_drive === 1,
-    handled: row.handled === 1,
+    testDrive: row.test_drive,
+    handled: row.handled,
     createdAt: row.created_at,
   }));
 }
 
-export function countOpenEnquiries(): number {
-  const { count } = getDb()
-    .prepare("SELECT COUNT(*) AS count FROM enquiries WHERE handled = 0")
-    .get() as { count: number };
-  return count;
+export async function countOpenEnquiries(): Promise<number> {
+  const { count, error } = await adminClient()
+    .from("enquiries")
+    .select("id", { count: "exact", head: true })
+    .eq("handled", false);
+  if (error) throw new Error(`Supabase: ${error.message}`);
+  return count ?? 0;
 }
 
-export function setEnquiryHandled(id: number, handled: boolean) {
-  getDb()
-    .prepare("UPDATE enquiries SET handled = ? WHERE id = ?")
-    .run(handled ? 1 : 0, id);
+export async function setEnquiryHandled(id: number, handled: boolean) {
+  check(await adminClient().from("enquiries").update({ handled }).eq("id", id));
 }

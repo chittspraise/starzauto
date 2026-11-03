@@ -72,7 +72,7 @@ export async function saveCar(
 ): Promise<CarFormState> {
   await requireAdmin();
 
-  const existing = carId ? findCar(carId) : null;
+  const existing = carId ? await findCar(carId) : null;
   if (carId && !existing) return { error: "This car no longer exists." };
 
   const parsed = carSchema.safeParse(Object.fromEntries(formData));
@@ -102,9 +102,9 @@ export async function saveCar(
   const car = { ...parsed.data, images: [...keptImages, ...newImages] };
 
   if (carId) {
-    updateCar(carId, car);
+    await updateCar(carId, car);
   } else {
-    insertCar(car);
+    await insertCar(car);
   }
   await deletePhotos(removedImages);
 
@@ -114,9 +114,9 @@ export async function saveCar(
 
 export async function removeCar(carId: number) {
   await requireAdmin();
-  const car = findCar(carId);
+  const car = await findCar(carId);
   if (car) {
-    deleteCar(carId);
+    await deleteCar(carId);
     await deletePhotos(car.images);
     updateTag(CARS_TAG);
   }
@@ -127,6 +127,6 @@ export async function removeCar(carId: number) {
 
 export async function markEnquiry(enquiryId: number, handled: boolean) {
   await requireAdmin();
-  setEnquiryHandled(enquiryId, handled);
+  await setEnquiryHandled(enquiryId, handled);
   redirect("/admin/enquiries");
 }

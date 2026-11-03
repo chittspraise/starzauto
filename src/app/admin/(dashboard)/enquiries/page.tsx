@@ -17,7 +17,7 @@ export default function EnquiriesPage() {
 
 async function EnquiryList() {
   await requireAdmin();
-  const enquiries = listEnquiries();
+  const enquiries = await listEnquiries();
 
   if (enquiries.length === 0) {
     return <p className="text-neutral-500">No enquiries yet.</p>;

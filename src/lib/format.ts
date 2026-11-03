@@ -28,6 +28,7 @@ export function carTitle(car: Pick<Car, "year" | "make" | "model"> & { variant?:
   return [car.year, car.make, car.model, car.variant].filter(Boolean).join(" ");
 }
 
+/** Public URL of a photo in the Supabase 'car-photos' storage bucket. */
 export function imageUrl(name: string) {
-  return `/uploads/${encodeURIComponent(name)}`;
+  return `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/car-photos/${encodeURIComponent(name)}`;
 }

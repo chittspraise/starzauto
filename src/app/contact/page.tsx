@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { EnquiryForm } from "@/components/enquiry-form";
+import { WhatsAppButton } from "@/components/whatsapp-button";
+import { SITE_NAME } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact us",
@@ -9,7 +11,7 @@ export default function ContactPage() {
   return (
     <div className="mx-auto grid max-w-5xl gap-10 px-4 py-12 md:grid-cols-2">
       <div>
-        <h1 className="text-3xl font-bold">Contact Starz Auto</h1>
+        <h1 className="text-3xl font-bold">Contact {SITE_NAME}</h1>
         <p className="mt-3 text-neutral-600">
           Looking for a particular car, want to sell your car, or have a question about financing?
           Send us a message and we&apos;ll get back to you.
@@ -25,6 +27,9 @@ export default function ContactPage() {
             <dd className="text-neutral-600">Mon–Sat, 8:00 – 17:00</dd>
           </div>
         </dl>
+        <div className="mt-6 max-w-xs">
+          <WhatsAppButton message={`Hi ${SITE_NAME}, I have a question.`} />
+        </div>
       </div>
       <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
         <EnquiryForm />

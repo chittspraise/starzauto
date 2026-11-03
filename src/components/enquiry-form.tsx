@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { submitEnquiry, type EnquiryState } from "@/app/actions/enquiry";
+import { WhatsAppIcon } from "./whatsapp-icon";
 
 const initialState: EnquiryState = { ok: false };
 
@@ -17,6 +18,20 @@ export function EnquiryForm({ carId, defaultMessage }: { carId?: number; default
       <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-900" role="status">
         <p className="font-semibold">Enquiry sent</p>
         <p className="mt-1 text-sm">{state.message}</p>
+        {state.whatsappUrl && (
+          <>
+            <p className="mt-4 text-sm">Want a faster reply? Send the same enquiry to us on WhatsApp:</p>
+            <a
+              href={state.whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-4 py-2.5 font-semibold text-white transition hover:bg-[#1ebe5b]"
+            >
+              <WhatsAppIcon />
+              Also send on WhatsApp
+            </a>
+          </>
+        )}
       </div>
     );
   }

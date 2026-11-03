@@ -15,7 +15,7 @@ export default function EditCarPage(props: PageProps<"/admin/cars/[id]/edit">) {
 
 async function EditCar({ params }: Pick<PageProps<"/admin/cars/[id]/edit">, "params">) {
   await requireAdmin();
-  const car = findCar(Number((await params).id));
+  const car = await findCar(Number((await params).id));
   if (!car) notFound();
 
   return (

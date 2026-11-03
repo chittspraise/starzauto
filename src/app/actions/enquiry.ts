@@ -1,13 +1,17 @@
 "use server";
 
+import { after } from "next/server";
 import { z } from "zod";
-import { findCar } from "@/lib/cars";
+import { getCar } from "@/lib/cars";
 import { insertEnquiry } from "@/lib/enquiries";
-import { carTitle } from "@/lib/format";
+import { carTitle, formatPrice } from "@/lib/format";
+import { SITE_NAME } from "@/lib/site";
+import { notifyDealer, whatsappLink } from "@/lib/whatsapp";
 
 export type EnquiryState = {
   ok: boolean;
   message?: string;
+  whatsappUrl?: string;
   errors?: Partial<Record<"name" | "email" | "phone" | "message", string[]>>;
 };
 
@@ -44,8 +48,8 @@ export async function submitEnquiry(
   }
 
   const { carId, name, email, phone, message, testDrive } = parsed.data;
-  const car = carId ? findCar(carId) : null;
-  insertEnquiry({
+  const car = carId ? await getCar(carId) : null;
+  await insertEnquiry({
     carId: car?.id ?? null,
     carTitle: car ? carTitle(car) : null,
     name,
@@ -55,5 +59,26 @@ export async function submitEnquiry(
     testDrive,
   });
 
-  return { ok: true, message: "Thanks! We've received your enquiry and will be in touch soon." };
+  const details = [
+    car ? `Car: ${carTitle(car)} (Ref #${car.id}) – ${formatPrice(car.price)}` : "General enquiry",
+    `Name: ${name}`,
+    phone ? `Phone: ${phone}` : false,
+    `Email: ${email}`,
+    testDrive && "Wants a test drive: yes",
+    "",
+    message,
+  ]
+    .filter((line) => line !== false)
+    .join("\n");
+
+  // Ping the dealer on WhatsApp after the visitor gets their response (if CallMeBot is set up).
+  after(() => notifyDealer(`🚗 New ${SITE_NAME} enquiry\n${details}`));
+
+  return {
+    ok: true,
+    message: "Thanks! We've received your enquiry and will be in touch soon.",
+    // Lets the visitor send the same enquiry to the dealer's WhatsApp in one tap.
+    whatsappUrl:
+      whatsappLink(`Hi ${SITE_NAME}, I just sent an enquiry on your website:\n\n${details}`) ?? undefined,
+  };
 }

@@ -1,8 +1,6 @@
 import "server-only";
 import { randomUUID } from "node:crypto";
-import { rm, writeFile } from "node:fs/promises";
-import path from "node:path";
-import { UPLOAD_DIR } from "./db";
+import { adminClient, check, PHOTO_BUCKET } from "./supabase";
 
 export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 export const MAX_PHOTOS = 12;
@@ -21,19 +19,23 @@ export function validatePhotos(files: File[]): string | null {
   return null;
 }
 
-/** Saves validated photos and returns their stored file names. */
+/** Uploads validated photos to Supabase Storage and returns their object paths. */
 export async function savePhotos(files: File[]): Promise<string[]> {
   return Promise.all(
     files.map(async (file) => {
       const name = `${randomUUID()}${EXTENSIONS[file.type]}`;
-      await writeFile(path.join(/*turbopackIgnore: true*/ UPLOAD_DIR, name), Buffer.from(await file.arrayBuffer()));
+      check(
+        await adminClient().storage.from(PHOTO_BUCKET).upload(name, file, {
+          contentType: file.type,
+          cacheControl: "31536000",
+        }),
+      );
       return name;
     }),
   );
 }
 
 export async function deletePhotos(names: string[]) {
-  await Promise.all(
-    names.map((name) => rm(path.join(/*turbopackIgnore: true*/ UPLOAD_DIR, path.basename(name)), { force: true })),
-  );
+  if (names.length === 0) return;
+  check(await adminClient().storage.from(PHOTO_BUCKET).remove(names));
 }

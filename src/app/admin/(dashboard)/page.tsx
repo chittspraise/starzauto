@@ -18,8 +18,7 @@ export default function AdminCarsPage() {
 
 async function CarsTable() {
   await requireAdmin();
-  const cars = listAllCars();
-  const openEnquiries = countOpenEnquiries();
+  const [cars, openEnquiries] = await Promise.all([listAllCars(), countOpenEnquiries()]);
 
   return (
     <>

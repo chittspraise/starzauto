@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CarGrid } from "@/components/car-card";
 import { getFeaturedCars, getMakes } from "@/lib/cars";
 import { BODY_TYPES } from "@/lib/types";
+import { SITE_NAME } from "@/lib/site";
 
 export default async function HomePage() {
   const [featured, makes] = await Promise.all([getFeaturedCars(), getMakes()]);
@@ -15,7 +16,7 @@ export default async function HomePage() {
           <div className="grid items-center gap-8 md:grid-cols-[1fr_auto]">
             <div>
               <h1 className="max-w-2xl text-4xl font-extrabold uppercase tracking-tight sm:text-5xl">
-                Find your next car at <span className="text-red-600">Starz Auto</span>
+                Find your next car at <span className="text-red-600">{SITE_NAME}</span>
               </h1>
               <p className="mt-4 max-w-xl text-lg text-neutral-300">
                 Hand-picked, inspected used cars at honest prices. Browse our stock and book a test
