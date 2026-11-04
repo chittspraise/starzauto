@@ -6,6 +6,7 @@ import { EnquiryForm } from "@/components/enquiry-form";
 import { Gallery } from "@/components/gallery";
 import { StatusBadge } from "@/components/status-badge";
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { CallButton } from "@/components/call-button";
 import { getCar } from "@/lib/cars";
 import { SITE_NAME } from "@/lib/site";
 import { carTitle, formatEngine, formatMileage, formatPrice } from "@/lib/format";
@@ -103,9 +104,12 @@ async function CarDetails({ params }: Pick<PageProps<"/cars/[id]">, "params">) {
           ) : (
             <>
               <h2 className="mb-4 text-lg font-semibold">Interested in this car?</h2>
-              <WhatsAppButton
-                message={`Hi ${SITE_NAME}, I'm interested in the ${title} (Ref #${car.id}) listed at ${formatPrice(car.price)}. Is it still available?`}
-              />
+              <div className="flex flex-col gap-3">
+                <WhatsAppButton
+                  message={`Hi ${SITE_NAME}, I'm interested in the ${title} (Ref #${car.id}) listed at ${formatPrice(car.price)}. Is it still available?`}
+                />
+                <CallButton />
+              </div>
               <p className="my-4 text-center text-xs uppercase tracking-wide text-neutral-400">
                 or send us a message
               </p>

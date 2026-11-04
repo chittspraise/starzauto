@@ -2,9 +2,11 @@ import Form from "next/form";
 import Image from "next/image";
 import Link from "next/link";
 import { CarGrid } from "@/components/car-card";
+import { WhatsAppButton } from "@/components/whatsapp-button";
 import { getFeaturedCars, getMakes } from "@/lib/cars";
 import { BODY_TYPES } from "@/lib/types";
-import { SITE_NAME } from "@/lib/site";
+import { OfficeMap } from "@/components/office-map";
+import { OFFICE_ADDRESS, OFFICE_MAP_URL, SITE_NAME, TRADING_HOURS } from "@/lib/site";
 
 export default async function HomePage() {
   const [featured, makes] = await Promise.all([getFeaturedCars(), getMakes()]);
@@ -77,12 +79,31 @@ export default async function HomePage() {
         )}
       </section>
 
+      <section id="sell" className="scroll-mt-20 bg-black text-white">
+        <div className="mx-auto grid max-w-6xl items-center gap-6 px-4 py-12 md:grid-cols-[1fr_auto]">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-red-500">Sell or trade in</p>
+            <h2 className="mt-1 text-3xl font-extrabold">Want to sell your car?</h2>
+            <p className="mt-2 max-w-xl text-neutral-300">
+              Get a free valuation – we buy outright or trade in against anything on our floor.
+            </p>
+          </div>
+          <div className="w-full md:w-72">
+            <WhatsAppButton
+              label="Get a free valuation"
+              message={`Hi ${SITE_NAME}, I'd like a free valuation for my car.\n\nMake & model:\nYear:\nMileage:\nSell outright or trade in:`}
+            />
+          </div>
+        </div>
+      </section>
+
       <section className="border-t border-neutral-200 bg-white">
-        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
           {[
             ["Inspected & serviced", "Every car is checked by our mechanics before it goes on sale."],
             ["Transparent pricing", "No hidden fees. The price you see is the price you pay."],
             ["Test drives welcome", "Request a test drive online and we'll get back to you fast."],
+            ["Trade-ins welcome", "Trade in your current car against anything on our floor."],
           ].map(([title, text]) => (
             <div key={title}>
               <h3 className="font-semibold">
@@ -91,6 +112,35 @@ export default async function HomePage() {
               <p className="mt-1 text-sm text-neutral-600">{text}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-neutral-200">
+        <div className="mx-auto grid max-w-6xl items-start gap-8 px-4 py-12 md:grid-cols-[1fr_2fr]">
+          <div>
+            <h2 className="text-2xl font-bold">Visit our office</h2>
+            <p className="mt-2 text-neutral-700">📍 {OFFICE_ADDRESS}</p>
+            <a
+              href={OFFICE_MAP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-1 inline-block text-sm font-semibold text-red-600 hover:underline"
+            >
+              Get directions ↗
+            </a>
+            <h3 className="mt-6 font-semibold">Trading hours</h3>
+            <table className="mt-1 text-sm text-neutral-600">
+              <tbody>
+                {TRADING_HOURS.map(([days, hours]) => (
+                  <tr key={days}>
+                    <td className="pr-4">{days}</td>
+                    <td>{hours}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <OfficeMap />
         </div>
       </section>
     </>
