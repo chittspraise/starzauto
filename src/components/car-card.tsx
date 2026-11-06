@@ -6,6 +6,7 @@ import { StatusBadge } from "./status-badge";
 
 export function CarCard({ car }: { car: Car }) {
   const title = carTitle(car);
+  // On phones (two cards per row) only the first three chips are shown.
   const chips = [
     formatMileage(car.mileage, car.mileageGenuine),
     car.fuelType,
@@ -23,33 +24,38 @@ export function CarCard({ car }: { car: Car }) {
         <CarImage
           image={car.images[0]}
           alt={title}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          sizes="(min-width: 1024px) 33vw, 50vw"
         />
         {car.status !== "available" && (
-          <div className="absolute left-3 top-3">
+          <div className="absolute left-2 top-2 sm:left-3 sm:top-3">
             <StatusBadge status={car.status} />
           </div>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-4">
+      <div className="flex flex-1 flex-col gap-2 p-2.5 sm:gap-3 sm:p-4">
         <div>
-          <h3 className="font-semibold text-neutral-900 group-hover:text-red-600">{title}</h3>
-          <p className="text-sm text-neutral-500">
+          <h3 className="text-sm leading-snug font-semibold text-neutral-900 group-hover:text-red-600 sm:text-base">
+            {title}
+          </h3>
+          <p className="text-xs text-neutral-500 sm:text-sm">
             {[car.bodyType, car.color].filter(Boolean).join(" · ")}
           </p>
         </div>
-        <ul className="flex flex-wrap gap-2 text-xs text-neutral-600">
-          {chips.map((chip) => (
-            <li key={chip} className="rounded-full bg-neutral-100 px-2.5 py-1">
+        <ul className="flex flex-wrap gap-1 text-[11px] text-neutral-600 sm:gap-2 sm:text-xs">
+          {chips.map((chip, i) => (
+            <li
+              key={chip}
+              className={`rounded-full bg-neutral-100 px-2 py-0.5 sm:px-2.5 sm:py-1 ${i >= 3 ? "hidden sm:block" : ""}`}
+            >
               {chip}
             </li>
           ))}
         </ul>
         <div className="mt-auto">
-          <p className="text-xl font-bold text-neutral-900">
+          <p className="text-base font-bold text-neutral-900 sm:text-xl">
             {formatPrice(car.price)}
             {car.priceDestination && (
-              <span className="text-sm font-medium text-neutral-500"> to {car.priceDestination}</span>
+              <span className="block text-xs font-medium text-neutral-500 sm:inline sm:text-sm"> to {car.priceDestination}</span>
             )}
           </p>
           {car.priceNote && <p className="text-xs text-neutral-500">{car.priceNote}</p>}
@@ -61,7 +67,7 @@ export function CarCard({ car }: { car: Car }) {
 
 export function CarGrid({ cars }: { cars: Car[] }) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
       {cars.map((car) => (
         <CarCard key={car.id} car={car} />
       ))}
@@ -71,9 +77,9 @@ export function CarGrid({ cars }: { cars: Car[] }) {
 
 export function CarGridSkeleton({ count = 6 }: { count?: number }) {
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
       {Array.from({ length: count }, (_, i) => (
-        <div key={i} className="h-80 animate-pulse rounded-xl bg-neutral-200" />
+        <div key={i} className="h-64 animate-pulse rounded-xl bg-neutral-200 sm:h-80" />
       ))}
     </div>
   );

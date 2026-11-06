@@ -3,6 +3,7 @@ import { EnquiryForm } from "@/components/enquiry-form";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { OfficeMap } from "@/components/office-map";
 import { CallButton } from "@/components/call-button";
+import { SocialLinks } from "@/components/social-links";
 import {
   EMAIL,
   OFFICE_ADDRESS,
@@ -71,6 +72,12 @@ export default function ContactPage() {
                   ))}
                 </tbody>
               </table>
+            </dd>
+          </div>
+          <div>
+            <dt className="font-semibold">Follow us</dt>
+            <dd>
+              <SocialLinks tone="light" className="mt-1" />
             </dd>
           </div>
           <div>

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
+import { SocialLinks } from "@/components/social-links";
 import {
   EMAIL,
   OFFICE_ADDRESS,
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               <a href={`mailto:${EMAIL}`} className="hover:text-white">
                 ✉️ {EMAIL}
               </a>
+              <SocialLinks className="mt-2" />
             </div>
             <div className="flex flex-col gap-1 sm:items-end">
               <a href={OFFICE_MAP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-white">

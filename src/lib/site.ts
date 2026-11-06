@@ -11,6 +11,10 @@ export const PHONE_LINK = "tel:+263771031288";
 /** Contact email address. */
 export const EMAIL = "nyenyedzip@gmail.com";
 
+/** Social media pages, shown in the footer and on the contact page. */
+export const INSTAGRAM_URL = "https://www.instagram.com/starzautozw/";
+export const FACEBOOK_URL = "https://www.facebook.com/share/1FT9ATpv34/";
+
 /** Office pin (latitude, longitude) — from the office's Google Maps link. */
 const OFFICE_COORDS = "-17.7855,31.0414";
 
