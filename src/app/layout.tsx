@@ -53,7 +53,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 <span className="text-red-600">STARZ</span>AUTOZW
               </span>
             </Link>
-            <div className="flex items-center gap-4 text-sm font-semibold uppercase tracking-wide sm:gap-5">
+            <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-wide sm:gap-5">
               <Link href="/cars" className="py-2 hover:text-red-500">
                 <span className="sm:hidden">Cars</span>
                 <span className="hidden sm:inline">Browse cars</span>
@@ -63,9 +63,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               </Link>
               <Link
                 href="/admin"
-                className="hidden rounded border border-red-600 px-3 py-1.5 hover:bg-red-600 hover:text-white sm:inline-block"
+                className="rounded border border-red-600 px-2.5 py-1.5 hover:bg-red-600 hover:text-white sm:px-3"
               >
-                Dealer login
+                <span className="sm:hidden">Login</span>
+                <span className="hidden sm:inline">Dealer login</span>
               </Link>
             </div>
           </nav>
@@ -75,9 +76,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-neutral-400 sm:flex-row sm:justify-between">
             <div className="flex flex-col gap-1">
               <p>© {SITE_NAME}. Quality used cars.</p>
-              <Link href="/admin" className="hover:text-white sm:hidden">
-                🔑 Dealer login
-              </Link>
               <a href={PHONE_LINK} className="hover:text-white">
                 📞 {PHONE_DISPLAY}
               </a>
