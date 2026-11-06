@@ -39,7 +39,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="flex min-h-full flex-col">
         <header className="sticky top-0 z-20 border-b-2 border-red-600 bg-black text-white">
-          <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2">
+          <nav className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2">
             <Link href="/" aria-label={`${SITE_NAME} home`} className="flex shrink-0 items-center gap-3">
               <Image
                 src="/logo.jpg"
@@ -47,22 +47,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
                 width={720}
                 height={698}
                 priority
-                className="h-14 w-auto rounded"
+                className="h-11 w-auto rounded sm:h-14"
               />
               <span className="hidden text-xl font-extrabold italic tracking-tight sm:inline">
                 <span className="text-red-600">STARZ</span>AUTOZW
               </span>
             </Link>
-            <div className="flex items-center gap-5 text-sm font-semibold uppercase tracking-wide">
-              <Link href="/cars" className="hover:text-red-500">
-                Browse cars
+            <div className="flex items-center gap-4 text-sm font-semibold uppercase tracking-wide sm:gap-5">
+              <Link href="/cars" className="py-2 hover:text-red-500">
+                <span className="sm:hidden">Cars</span>
+                <span className="hidden sm:inline">Browse cars</span>
               </Link>
-              <Link href="/contact" className="hover:text-red-500">
+              <Link href="/contact" className="py-2 hover:text-red-500">
                 Contact
               </Link>
               <Link
                 href="/admin"
-                className="rounded border border-red-600 px-3 py-1.5 hover:bg-red-600 hover:text-white"
+                className="hidden rounded border border-red-600 px-3 py-1.5 hover:bg-red-600 hover:text-white sm:inline-block"
               >
                 Dealer login
               </Link>
@@ -74,6 +75,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-neutral-400 sm:flex-row sm:justify-between">
             <div className="flex flex-col gap-1">
               <p>© {SITE_NAME}. Quality used cars.</p>
+              <Link href="/admin" className="hover:text-white sm:hidden">
+                🔑 Dealer login
+              </Link>
               <a href={PHONE_LINK} className="hover:text-white">
                 📞 {PHONE_DISPLAY}
               </a>

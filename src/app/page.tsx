@@ -14,13 +14,13 @@ export default async function HomePage() {
   return (
     <>
       <section className="bg-black bg-[radial-gradient(ellipse_at_top_right,rgba(220,38,38,0.25),transparent_60%)] text-white">
-        <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4 py-10 sm:py-16">
           <div className="grid items-center gap-8 md:grid-cols-[1fr_auto]">
             <div>
-              <h1 className="max-w-2xl text-4xl font-extrabold uppercase tracking-tight sm:text-5xl">
+              <h1 className="max-w-2xl text-3xl font-extrabold uppercase tracking-tight break-words sm:text-5xl">
                 Find your next car at <span className="text-red-600">{SITE_NAME}</span>
               </h1>
-              <p className="mt-4 max-w-xl text-lg text-neutral-300">
+              <p className="mt-4 max-w-xl text-base text-neutral-300 sm:text-lg">
                 Hand-picked, inspected used cars at honest prices. Browse our stock and book a test
                 drive today.
               </p>

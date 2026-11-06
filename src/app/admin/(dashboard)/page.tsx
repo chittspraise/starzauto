@@ -43,8 +43,8 @@ async function CarsTable() {
             <tr>
               <th className="px-4 py-3">Car</th>
               <th className="px-4 py-3">Price</th>
-              <th className="px-4 py-3">Mileage</th>
-              <th className="px-4 py-3">Photos</th>
+              <th className="hidden px-4 py-3 sm:table-cell">Mileage</th>
+              <th className="hidden px-4 py-3 sm:table-cell">Photos</th>
               <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -58,9 +58,9 @@ async function CarsTable() {
                   </Link>
                   {car.featured && <span className="ml-2 text-red-600" title="Featured">★</span>}
                 </td>
-                <td className="px-4 py-3">{formatPrice(car.price)}</td>
-                <td className="px-4 py-3">{formatMileage(car.mileage)}</td>
-                <td className="px-4 py-3">{car.images.length}</td>
+                <td className="whitespace-nowrap px-4 py-3">{formatPrice(car.price)}</td>
+                <td className="hidden px-4 py-3 sm:table-cell">{formatMileage(car.mileage)}</td>
+                <td className="hidden px-4 py-3 sm:table-cell">{car.images.length}</td>
                 <td className="px-4 py-3">
                   <StatusBadge status={car.status} />
                 </td>

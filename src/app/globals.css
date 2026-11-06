@@ -19,7 +19,8 @@ body {
 
 @layer components {
   .input {
-    @apply w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 shadow-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-200;
+    /* 16px on phones so iOS Safari doesn't zoom in when a field is tapped. */
+    @apply w-full rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-base text-neutral-900 sm:py-2 sm:text-sm shadow-sm outline-none focus:border-red-600 focus:ring-2 focus:ring-red-200;
   }
   .label {
     @apply mb-1 block text-sm font-medium text-neutral-700;

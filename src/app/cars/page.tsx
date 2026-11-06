@@ -3,6 +3,7 @@ import Form from "next/form";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CarGrid, CarGridSkeleton } from "@/components/car-card";
+import { FilterToggle } from "@/components/filter-toggle";
 import { getMakes, searchCars } from "@/lib/cars";
 import { parseFilters } from "@/lib/filters";
 import {
@@ -35,8 +36,14 @@ async function Results({ searchParams }: Pick<PageProps<"/cars">, "searchParams"
   return (
     <div className="mt-6 grid gap-8 lg:grid-cols-[260px_1fr]">
       {/* key resets the uncontrolled inputs when the URL changes */}
-      <FilterForm key={JSON.stringify(filters)} filters={filters} makes={makes} />
-      <div>
+      <FilterToggle
+        activeCount={
+          Object.entries(filters).filter(([key, value]) => key !== "sort" && value !== undefined && value !== "").length
+        }
+      >
+        <FilterForm key={JSON.stringify(filters)} filters={filters} makes={makes} />
+      </FilterToggle>
+      <div className="min-w-0">
         <p className="mb-4 text-sm text-neutral-600">
           {cars.length} {cars.length === 1 ? "car" : "cars"} found
         </p>
